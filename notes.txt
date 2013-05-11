@@ -1,0 +1,112 @@
+1 D3DDEVTYPE
+    DEDDEVTYPE_HAL
+	DEDDEVTYPE_REF
+	
+2 COM
+独立于编程语言，并且向下兼容
+
+只需要知道如何通过
+1 某个特定函数
+或
+2 另一个COM接口的方法
+来获得指向某一个COM接口的指针
+
+
+创建COM接口时不可使用C++ 关键字 new
+
+使用完一个COM接口需要调用继承来的 IUnknow 接口的 Release方法
+而不是delete，COM对象能够对所使用的内存实施自治
+
+每个COM接口都有一个前缀，比如表示Surface的COM接口的一个例子
+IDrect3DSurface9
+
+1 Surface
+用于存储2D图像数据的一个像素矩阵
+
+WIDTH X HEIGHT 注意 Pitch的存在
+
+宽高均用像素来度量
+PITCH用字节数来度量
+
+多重采样 D3DMULTISAMPLE_TYPE
+
+3DMULTISAMPLE_1_SAMPLE --> 3DMULTISAMPLE_16_SAMPLE
+& 与特定多重采样类型相关的 质量水平，用DWORD描述
+
+像素格式
+
+创建纹理或者Surface 这种 D3D的资源的时候，用D3DFORMAT 枚举来定义
+D3DFMT_XXXXX
+
+内存池
+D3DPOOL_DEFAULT
+    D3D将资源放入最适合该资源类型及其使用方式的存储区中，可能是显存，
+AGP存储区（？）或者系统内存， 调用 IDirect3DDevice9::Reset之前，必须
+对默认内存池种的资源销毁或释放，调用后需要对内存池种的资源重新初始化
+
+D3DPOOL_MANAGE
+	放入该池的资源有D3D管理，将根据需要被设备自动转移到显存或AGP存储区
+中，此外这些资源会在内存中保留一个备份，可以在必要时将这些资源自动更新
+到显存中
+
+D3DPOOL_SYSTEMMEM
+    放到内存里
+	
+D3DPOOL_SCRATCH
+    放内存，但不同上，不受图形设备的制约，设备无法访问池中资源，但资源
+之间可以互相复制
+
+交换链和页面置换
+D3D维护着一个由两到三个表面组成的 SWAP CHAIN，这个集合用接口 
+IDirect3DSwapChain9 表示
+
+PageFlip
+
+深度缓冲的位数
+D3DFMT_D32 等等
+
+D3D种可以用两种不同的方式进行顶点运算(Vertex Processing)，软件/硬件的
+显卡支持硬件顶点运算的===支持变换和光照的硬件计算
+
+设备性能
+对应于 D3DCAP9种的一位或某个数据成员
+
+顶点格式的指定
+
+struct NormalTextVertex
+{
+    float _x, _y, _z;
+	float _nx, _ny, _nz;
+	float _u, _v;
+};
+
+D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_TEX1
+
+定义顺序应保持一致
+
+定义三角形的顺序非常重要 WINDING ORDER
+
+默认状态下 顶点排列顺序为顺时针的是正面
+
+device->SetRenderState(D3DRS_CULLMODE, value);
+
+D3DCULL_NONE
+D3DCULL_CW
+D3DCULL_CCW
+
+kernel32.lib
+user32.lib
+gdi32.lib
+winspool.lib
+comdlg32.lib
+advapi32.lib
+shell32.lib
+ole32.lib
+oleaut32.lib
+uuid.lib
+odbc32.lib
+odbccp32.lib
+d3d9.lib
+d3dx9.lib
+winmm.lib
+
